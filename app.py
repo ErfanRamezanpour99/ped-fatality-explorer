@@ -69,14 +69,14 @@ if mode == "🗺️ Explore the map":
 
     with col_map:
         if state == "Entire U.S. (clustered)":
-            m = folium.Map(location=[39.5, -96.5], zoom_start=5, tiles="cartodbpositron")
+            m = folium.Map(location=[39.5, -96.5], zoom_start=5, tiles="cartodbpositron", prefer_canvas=True)
             FastMarkerCluster(view[["LATITUDE", "LONGITUDE"]].values.tolist()).add_to(m)
             st.caption("Zoom in to break clusters apart. Pick a state for "
                        "individually explained crashes.")
         else:
             view = view[view.STATENAME == state]
             m = folium.Map(location=[view.LATITUDE.mean(), view.LONGITUDE.mean()],
-                           zoom_start=7, tiles="cartodbpositron")
+                           zoom_start=7, tiles="cartodbpositron", prefer_canvas=True)
             if len(view) > 5000:
                 FastMarkerCluster(view[["LATITUDE", "LONGITUDE"]].values.tolist()).add_to(m)
                 st.warning(f"{len(view):,} points - clustered for speed. Narrow the "
@@ -95,7 +95,7 @@ if mode == "🗺️ Explore the map":
                         f"<b style='color:{r.factor_color}'>{r.factor_label}</b><br>"
                         f"{r.narrative}</div>", max_width=280),
                 ).add_to(m)
-        st_folium(m, height=560, use_container_width=True)
+        st_folium(m, height=560, use_container_width=True, returned_objects=[])
 
     with col_side:
         st.subheader(f"{len(view):,} deaths shown")
@@ -146,7 +146,7 @@ else:
             with col_map:
                 rc = res["route_coords"]
                 m = folium.Map(location=[rc[0][1], rc[0][0]], zoom_start=13,
-                               tiles="cartodbpositron")
+                               tiles="cartodbpositron", prefer_canvas=True)
                 folium.PolyLine([(lat, lon) for lon, lat in rc],
                                 color="#3182ce", weight=4, opacity=0.8).add_to(m)
                 for r in crashes.itertuples():
@@ -159,7 +159,7 @@ else:
                             f"<b style='color:{r.factor_color}'>{r.factor_label}</b><br>"
                             f"{r.narrative}</div>", max_width=280),
                     ).add_to(m)
-                st_folium(m, height=520, use_container_width=True)
+                st_folium(m, height=520, use_container_width=True, returned_objects=[])
             with col_side:
                 if len(crashes):
                     st.markdown("**Corridor risk pattern**")
