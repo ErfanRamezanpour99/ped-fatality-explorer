@@ -1,3 +1,9 @@
 __pycache__/
 *.pyc
 .DS_Store
+# regenerable pipeline outputs (run analysis/run_all.py to rebuild)
+analysis/my_run/
+analysis/output/
+analysis/*.parquet
+# raw FARS data: download from NHTSA (see analysis/README.md)
+raw_fars/
